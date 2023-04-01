@@ -1,14 +1,17 @@
 package com.hairel.ecommercesystem.service;
 
-import com.hairel.ecommercesystem.entity.Cart;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface CartService {
-    public void addToCart(int productId, int quantity);
+    public String addToCart(int cartId, int productId, int quantity);
 
-    public Page<Cart> getListInCart(Pageable pageable);
+    public Page<Object[]> getListInCart(Pageable pageable);
 
-    public void removeProductFromCart(int productId);
+    public List<Object[]> getListInCartById(int cartId);
+
+    public void removeProductFromCart(int cartId, int productId);
 
 }

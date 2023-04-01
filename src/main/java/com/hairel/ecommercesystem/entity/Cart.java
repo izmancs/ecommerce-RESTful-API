@@ -5,8 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "cart")
+@Table(name = "carts")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,16 +20,10 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int cartId;
 
-    @Column(name = "quantity")
-    private int Quantity;
-
-    @Column(name = "unit_price")
-    private double unitPrice;
-
     @Column(name = "total_amount")
-    private double totalAmount;
+    private BigDecimal totalAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany(mappedBy = "cart")
+    private List<Order> orders = new ArrayList<>();
+
 }

@@ -1,13 +1,15 @@
 package com.hairel.ecommercesystem.controller;
 
-import com.hairel.ecommercesystem.entity.Cart;
 import com.hairel.ecommercesystem.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class CartController {
@@ -16,28 +18,34 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/cart/addtocart")
-    public String addToCart(@RequestParam(name = "product_id") int productId, @RequestParam(name = "quantity") int quantity) {
+    public String addToCart(@RequestParam(name = "cart_id", defaultValue = "-1") int cartId,
+                            @RequestParam(name = "product_id") int productId,
+                            @RequestParam(name = "quantity") int quantity) {
 
-        cartService.addToCart(productId,quantity);
-
-        return "Product added to Shopping Cart.";
+        return cartService.addToCart(cartId,productId,quantity);
     }
 
     @GetMapping("/cart")
-    public Page<Cart> getListInCart(@RequestParam(name = "page", defaultValue = "0") int page,
-                                    @RequestParam(name = "size", defaultValue = "10") int size,
-                                    @RequestParam(name = "sortBy", defaultValue = "cartId") String sortBy) {
+    public ResponseEntity<Page<Object[]>> getListInCart(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                        @RequestParam(name = "size", defaultValue = "10") int size,
+                                                        @RequestParam(name = "sortBy", defaultValue = "cart_id") String sortBy) {
 
-        Sort sort = Sort.by(sortBy);
-        Pageable pageable = PageRequest.of(page, size,sort);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Object[]> pageResult = cartService.getListInCart(pageable);
 
-        return cartService.getListInCart(pageable);
+        return ResponseEntity.ok().body(pageResult);
     }
 
-    @DeleteMapping("/cart/{id}")
-    public String removeProductFromCart(@PathVariable("id") int productId) {
+    @GetMapping("/cart/{id}")
+    public List<Object[]> getListInCartById(@PathVariable("id") int cartId) {
+        return cartService.getListInCartById(cartId);
+    }
 
-        cartService.removeProductFromCart(productId);
+    @DeleteMapping("/cart")
+    public String removeProductFromCart(@RequestParam(name = "cart_id", defaultValue = "-1") int cartId,
+                                        @RequestParam(name = "product_id", defaultValue = "-1") int productId) {
+
+        cartService.removeProductFromCart(cartId,productId);
 
         return "Product removed from Shopping Cart.";
     }

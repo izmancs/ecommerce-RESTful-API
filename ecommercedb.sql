@@ -16,60 +16,87 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `cart`
+-- Table structure for table `carts`
 --
 
-DROP TABLE IF EXISTS `cart`;
+DROP TABLE IF EXISTS `carts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cart` (
+CREATE TABLE `carts` (
   `cart_id` int NOT NULL,
-  `quantity` int DEFAULT NULL,
-  `total_amount` double DEFAULT NULL,
-  `unit_price` double DEFAULT NULL,
-  `product_id` int DEFAULT NULL,
-  PRIMARY KEY (`cart_id`),
-  KEY `FK3d704slv66tw6x5hmbm6p2x3u` (`product_id`),
-  CONSTRAINT `FK3d704slv66tw6x5hmbm6p2x3u` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`)
+  `total_amount` decimal(38,2) DEFAULT NULL,
+  PRIMARY KEY (`cart_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `cart_seq`
+-- Table structure for table `carts_seq`
 --
 
-DROP TABLE IF EXISTS `cart_seq`;
+DROP TABLE IF EXISTS `carts_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `cart_seq` (
+CREATE TABLE `carts_seq` (
   `next_val` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `product`
+-- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `product`;
+DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product` (
+CREATE TABLE `orders` (
+  `order_id` int NOT NULL,
+  `quantity` int NOT NULL,
+  `cart_id` int DEFAULT NULL,
+  `product_id` int DEFAULT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `FK594fgx8wpklcf3t41jq3grhlh` (`cart_id`),
+  KEY `FKkp5k52qtiygd8jkag4hayd0qg` (`product_id`),
+  CONSTRAINT `FK594fgx8wpklcf3t41jq3grhlh` FOREIGN KEY (`cart_id`) REFERENCES `carts` (`cart_id`),
+  CONSTRAINT `FKkp5k52qtiygd8jkag4hayd0qg` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `orders_seq`
+--
+
+DROP TABLE IF EXISTS `orders_seq`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders_seq` (
+  `next_val` bigint DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `products` (
   `product_id` int NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `product_name` varchar(255) DEFAULT NULL,
-  `unit_price` double DEFAULT NULL,
+  `unit_price` decimal(38,2) DEFAULT NULL,
   PRIMARY KEY (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `product_seq`
+-- Table structure for table `products_seq`
 --
 
-DROP TABLE IF EXISTS `product_seq`;
+DROP TABLE IF EXISTS `products_seq`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `product_seq` (
+CREATE TABLE `products_seq` (
   `next_val` bigint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -83,4 +110,4 @@ CREATE TABLE `product_seq` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-01  8:23:03
+-- Dump completed on 2023-04-01 16:32:24
